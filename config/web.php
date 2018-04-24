@@ -9,7 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
@@ -20,7 +20,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'dektrium\user\models\User',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -53,6 +53,14 @@ $config = [
         */
     ],
     'params' => $params,
+    'modules' => [
+        'user' => [
+            'class' => 'dektrium\user\Module',
+            'enableConfirmation' => false, // Отправить письмо о регистрации на почту.
+            'enableUnconfirmedLogin' => true, // Регистрация не требует подтверждения.
+            'admins' => ['administrator'], // Список администраторов.
+        ],
+    ],
 ];
 
 if (YII_ENV_DEV) {
