@@ -2,8 +2,10 @@
 
 namespace app\models;
 
+use Imagine\Gd\Imagine;
 use Yii;
 use dektrium\user\models\User;
+use yii\imagine\Image as ImageHelper;
 
 /**
  * This is the model class for table "image".
@@ -64,25 +66,27 @@ class Image extends \yii\db\ActiveRecord
     }
 
     /**
-     * Загрузка файла.
+     * Сохранение с сохранением загруженного файла.
+     * @param bool $runValidation проверка перед запиьсью.
+     * @param array $attributeNames Список атрибутов для записи.
+     * @return bool Результат сохранения(удачно/не удачно).
      */
     public function save($runValidation = true, $attributeNames = null)
     {
         if (parent::save($runValidation, $attributeNames)) {
-            if($this->file !== NULL)
-            {
+            if ($this->file !== NULL) {
                 // Если файл есть сохраняем.
                 $path = Yii::getAlias('@runtime/upload');
-                if(!file_exists($path))
-                {
+                if (!file_exists($path)) {
                     mkdir($path, 0777, true);
                 }
-                $fileName = $path . '/image_' . $this->id . '.' . $this->file->extension;
-                if(file_exists($fileName))
-                {
+                $fileName = $path . '/image_' . $this->id . '.png';
+                if (file_exists($fileName)) {
                     unlink($fileName);
                 }
-                $this->file->saveAs($fileName);
+
+                // Сохранение с перерекодированием в png.
+                ImageHelper::getImagine()->open($this->file->tempName)->save($fileName);
             }
             return true;
         }
