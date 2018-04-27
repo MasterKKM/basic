@@ -27,6 +27,7 @@ $this->title = 'My Yii Application';
                 echo \yii\widgets\ListView::widget([
                     'dataProvider' => $dataProvider,
                     'itemView' => '_list',
+                    'layout' => '{summary}{items}<div class="clearfix"></div>{pager}'
                 ]);
                 ?>
             </div>
