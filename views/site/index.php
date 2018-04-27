@@ -1,7 +1,8 @@
 <?php
 
-use yii\helpers\Html;
+use Yii;
 use newerton\fancybox\FancyBox;
+
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -12,7 +13,8 @@ $this->title = 'My Yii Application';
         <div class="jumbotron">
             <h1>Галерея!</h1>
 
-            <p class="lead">Это глалерея она показывается только зарегрстрированным пользователям!.</p>
+            <p class="lead"><?= (Yii::$app->user->isGuest) ? 'Зарегистрированные пользователи увидят горадо больше...' : 'Эта часть глалерееи показывается только зарегрстрированным пользователям!' ?>
+                .</p>
 
         </div>
 
@@ -22,12 +24,6 @@ $this->title = 'My Yii Application';
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                 </div>
                 <?php
-                $dataProvider = new \yii\data\ActiveDataProvider([
-                    'query' => \app\models\Image::find(),
-                    'pagination' => [
-                        'pageSize' => 6,
-                    ],
-                ]);
                 echo \yii\widgets\ListView::widget([
                     'dataProvider' => $dataProvider,
                     'itemView' => '_list',

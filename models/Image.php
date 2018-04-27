@@ -16,6 +16,7 @@ use Imagine\Image\ManipulatorInterface;
  * @property string $file_name
  * @property string $text
  * @property yii\web\UploadedFile $file
+ * @property int $free
  *
  * @property User $user
  */
@@ -42,7 +43,7 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'file_name'], 'required'],
+            [['user_id', 'file_name', 'free'], 'required'],
             [['user_id'], 'integer'],
             [['text'], 'string'],
             [['file_name'], 'string', 'max' => 255],
@@ -64,6 +65,7 @@ class Image extends \yii\db\ActiveRecord
             'user_id' => 'Владелец',
             'file_name' => 'File Name',
             'text' => 'Text',
+            'free' => 'Видимость',
         ];
     }
 
@@ -109,17 +111,17 @@ class Image extends \yii\db\ActiveRecord
     public function getThumb($name)
     {
         $path = Yii::getAlias('@runtime/upload');
-        preg_match_all('/(\d+)/', $name, $tab);
-        $id = $tab[0][0];
+        $table = Image::nameToId($name);
+        $id = $table['id'];
         $baseName = $path . '/image_' . $id . '.png';
-        if (count($tab[0]) == 1) {
+        if ($table['key'] === NULL) {
             if (file_exists($baseName)) {
                 // Если файл существует, выдаем.
                 return $baseName;
             }
             return NULL;
         }
-        $key = (int)$tab[0][1];
+        $key = $table['key'];
         $rezName = $path . '/buff/image_' . $id . '_' . $key . '.png';
         if (file_exists($rezName)) {
             // Если файл существует, выдаем.
@@ -166,7 +168,25 @@ class Image extends \yii\db\ActiveRecord
 
     public function delete()
     {
-        $this->deleteImages();
-        return parent::delete();
+        $rez = parent::delete();
+        if ($rez) {
+            $this->deleteImages();
+        }
+        return $rez;
+    }
+
+    /**
+     * Разбираем имя картинки получаем ид и формат.
+     * @param $name string Имя изображения.
+     * @return array Результат разбора имени.
+     */
+    public static function nameToId($name)
+    {
+        preg_match_all('/(\d+)/', $name, $tab);
+        $rez = ['id' => (int)$tab[0][0], 'key' => null];
+        if (isset($tab[0][1])) {
+            $rez['key'] = (int)$tab[0][1];
+        }
+        return $rez;
     }
 }

@@ -14,8 +14,7 @@ use yii\helpers\Url;
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
             <?php
-            if($model->isNewRecord)
-            {
+            if ($model->isNewRecord) {
                 $url = '\no-photo.jpg';
             } else {
                 $url = Url::to(['/image/load', 'name' => 'image_' . $model->id . '_1.png']);
@@ -28,6 +27,7 @@ use yii\helpers\Url;
 
             <?= $form->field($model, 'file')->fileInput() ?>
             <?= $form->field($model, 'text')->textarea() ?>
+            <?= $form->field($model, 'free')->dropDownList([0 => 'Только зарегистрированные пользователи', 1 => 'Все']) ?>
 
             <div class="form-group">
                 <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>

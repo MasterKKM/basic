@@ -43,6 +43,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ],
                     'file_name',
+                    [
+                        'attribute' => 'free',
+                        'value' => function ($data) {
+                            return ($data->free) ? 'Все' : 'Только зарегистрированные';
+                        }
+                    ],
                     'text:ntext',
                 ],
             ]) ?>

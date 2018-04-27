@@ -33,9 +33,13 @@ class ImageController extends Controller
                 'only' => ['index', 'view', 'create', 'delete', 'update', 'load'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'delete', 'update', 'load'],
+                        'actions' => ['index', 'view', 'create', 'delete', 'update'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['load'],
+                        'allow' => true,
                     ],
                 ],
             ],
@@ -49,7 +53,7 @@ class ImageController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Image::find(),
+            'query' => Image::find()->where('user_id = :id', [':id' => Yii::$app->user->getId()]),
         ]);
 
         return $this->render('index', [
@@ -159,6 +163,14 @@ class ImageController extends Controller
      */
     public function actionLoad($name)
     {
+        if (Yii::$app->user->isGuest) {
+            $tab = Image::nameToId($name);
+            $id = $tab['id'];
+            $model = Image::findOne($id);
+            if (empty($model) || !$model->free) {
+                throw new NotFoundHttpException('The requested page does not exist.');
+            }
+        }
         $fileName = (new Image())->getThumb($name);
         if ($fileName === NULL) {
             throw new NotFoundHttpException('The requested page does not exist.');
