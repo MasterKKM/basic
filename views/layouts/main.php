@@ -42,6 +42,8 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Управление галереей', 'url' => ['/image/index']],
+            ['label' => 'Профиль', 'url' => ['/user/settings/profile']],
+            ['label' => 'Администрирование', 'url' =>['/user/admin/index']],
             Yii::$app->user->isGuest ?
                 ['label' => 'Sign in', 'url' => ['/user/security/login']] :
                 ['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',
