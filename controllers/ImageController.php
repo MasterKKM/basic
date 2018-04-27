@@ -28,6 +28,17 @@ class ImageController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'delete', 'update', 'load'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'delete', 'update', 'load'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -95,7 +106,7 @@ class ImageController extends Controller
             }
         }
 
-        return $this->render('getfile', [
+        return $this->render('create', [
             'model' => $model,
         ]);
     }

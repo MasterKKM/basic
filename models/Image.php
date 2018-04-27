@@ -48,6 +48,9 @@ class Image extends \yii\db\ActiveRecord
             [['file_name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['file'], 'file', 'extensions' => 'jpg, png'],
+            [['text', 'file_name'], 'filter' => function ($value) {
+                return strip_tags($value);
+            }]
         ];
     }
 
@@ -58,7 +61,7 @@ class Image extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
+            'user_id' => 'Владелец',
             'file_name' => 'File Name',
             'text' => 'Text',
         ];
@@ -150,13 +153,11 @@ class Image extends \yii\db\ActiveRecord
         $pathName = Yii::getAlias('@runtime/upload/buff') . '/image_' . $this->id . '_';
         $tabnames = [];
 
-        foreach($this->keyTable as $i=>$val)
-        {
+        foreach ($this->keyTable as $i => $val) {
             $tabnames[] = $pathName . $i . '.png';
         }
 
-        foreach ($tabnames as $fileName)
-        {
+        foreach ($tabnames as $fileName) {
             if (file_exists($fileName)) {
                 unlink($fileName);
             }

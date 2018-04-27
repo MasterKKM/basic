@@ -14,7 +14,13 @@ use yii\helpers\Url;
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
             <?php
-            echo '<img class="img-responsive" src="' . Url::to(['/image/load', 'name' => 'image_' . $model->id . '_1.png']) . '" />';
+            if($model->isNewRecord)
+            {
+                $url = '\no-photo.jpg';
+            } else {
+                $url = Url::to(['/image/load', 'name' => 'image_' . $model->id . '_1.png']);
+            }
+            echo '<img class="img-responsive" src="' . $url . '" />';
             ?>
         </div>
         <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
