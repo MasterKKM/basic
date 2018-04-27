@@ -6,6 +6,7 @@ use Yii;
 use app\models\Image;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -66,12 +67,17 @@ class ImageController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws ForbiddenHttpException Если попытка доступа к чужой картинке.
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+        if ($model->user_id == Yii::$app->user->getId()) {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        throw new ForbiddenHttpException('Это не Ваша галерея.');
     }
 
     /**
@@ -109,7 +115,6 @@ class ImageController extends Controller
                 }
             }
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -121,25 +126,29 @@ class ImageController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws ForbiddenHttpException Если попытка доступа к чужой картинке.
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->file = UploadedFile::getInstance($model, 'file');
-            if ($model->file !== NULL) {
-                $model->user_id = Yii::$app->user->getId();
-                $model->file_name = $model->file->baseName . '.' . $model->file->extension;
+        if ($model->user_id == Yii::$app->user->getId()) {
+            if ($model->load(Yii::$app->request->post())) {
+                $model->file = UploadedFile::getInstance($model, 'file');
+                if ($model->file !== NULL) {
+                    $model->user_id = Yii::$app->user->getId();
+                    $model->file_name = $model->file->baseName . '.' . $model->file->extension;
+                }
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+        throw new ForbiddenHttpException('Это не Ваша галерея.');
     }
 
     /**
@@ -151,8 +160,10 @@ class ImageController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        if ($model->user_id == Yii::$app->user->getId()) {
+            $model->delete();
+        }
         return $this->redirect(['index']);
     }
 
