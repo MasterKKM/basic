@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Image */
@@ -10,18 +11,22 @@ use yii\widgets\ActiveForm;
 
 <div class="image-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <?php
+            echo '<img class="img-responsive" src="' . Url::to(['/image/load', 'name' => 'image_' . $model->id . '_1.png']) . '" />';
+            ?>
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+            <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
+            <?= $form->field($model, 'file')->fileInput() ?>
+            <?= $form->field($model, 'text')->textarea() ?>
 
-    <?= $form->field($model, 'file_name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <div class="form-group">
+                <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <?php ActiveForm::end(); ?>
+        </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>

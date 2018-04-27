@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -20,10 +21,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
-            'user_id',
+            [
+                'content' => function ($data) {
+                    return '<img src="' . Url::to(['/image/load', 'name' => 'image_' . $data->id . '_0.png']) . '" />';
+                }
+            ],
+            [
+                'attribute' => 'user_id',
+                'content' => function ($data) {
+                    return $data->user->username;
+                }
+            ],
             'file_name',
             'text:ntext',
 

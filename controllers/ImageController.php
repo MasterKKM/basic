@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\filters\AccessControl;
 
 /**
  * ImageController implements the CRUD actions for Image model.
@@ -59,6 +60,22 @@ class ImageController extends Controller
     }
 
     /**
+     * Finds the Image model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Image the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Image::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
      * Creates a new Image model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -94,8 +111,15 @@ class ImageController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+            if ($model->file !== NULL) {
+                $model->user_id = Yii::$app->user->getId();
+                $model->file_name = $model->file->baseName . '.' . $model->file->extension;
+            }
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
@@ -118,18 +142,20 @@ class ImageController extends Controller
     }
 
     /**
-     * Finds the Image model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Image the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * Выдача картинки загрузженной в галерею.
+     * @param $name string Имя изображения.
+     * @throws NotFoundHttpException Если картинка не неайдена.
      */
-    protected function findModel($id)
+    public function actionLoad($name)
     {
-        if (($model = Image::findOne($id)) !== null) {
-            return $model;
+        $fileName = (new Image())->getThumb($name);
+        if ($fileName === NULL) {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        header('Content-Type: image/png');
+        header("Content-Transfer-Encoding: binary ");
+
+        readfile($fileName);
     }
 }
