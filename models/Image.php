@@ -48,7 +48,7 @@ class Image extends \yii\db\ActiveRecord
             [['file_name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['file'], 'file', 'extensions' => 'jpg, png'],
-            [['text', 'file_name'], 'filter' => function ($value) {
+            [['text', 'file_name'], 'filter', 'filter' => function ($value) {
                 return strip_tags($value);
             }]
         ];
