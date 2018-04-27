@@ -61,7 +61,20 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if(! Yii::$app->user->isGuest)
+        {
+            $dataProvider = new \yii\data\ActiveDataProvider([
+                'query' => \app\models\Image::find(),
+                'pagination' => [
+                    'pageSize' => 6,
+                ],
+            ]);
+
+            return $this->render('index', [
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        return $this->render('index_2');
     }
 
     /**
