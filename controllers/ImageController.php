@@ -187,8 +187,8 @@ class ImageController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        header('Content-Type: image/png');
-        header("Content-Transfer-Encoding: binary ");
+        Yii::$app->response->headers->set('Content-Type', 'image/png');
+        Yii::$app->response->headers->set('Content-Transfer-Encoding', 'binary');
 
         readfile($fileName);
     }
