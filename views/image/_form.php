@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Image */
@@ -29,6 +30,18 @@ use yii\helpers\Url;
                 <?= $form->field($model, 'text')->textarea() ?>
                 <?= $form->field($model, 'free')->dropDownList([0 => 'Только зарегистрированные пользователи', 1 => 'Все']) ?>
 
+                <?php
+                echo '<label class="control-label">' . $model->attributeLabels()['event_date'] . '</label>';
+                echo DatePicker::widget([
+                    'name' => 'Image[event_date]',
+                    'value' => $model->event_date,
+                    'options' => ['placeholder' => 'Выбериьте дату когда сделан снимок ...'],
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'todayHighlight' => true
+                    ]
+                ]);
+                ?>
                 <div class="form-group">
                     <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
                 </div>

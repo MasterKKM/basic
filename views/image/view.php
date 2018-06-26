@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'model' => $model,
                 'attributes' => [
                     'id',
+                    'event_date',
                     [
                         'attribute' => 'user_id',
                         'value' => function ($data) {
@@ -49,7 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             return ($data->free) ? 'Все' : 'Только зарегистрированные';
                         }
                     ],
-                    'text:ntext',
                 ],
             ]) ?>
         </div>
