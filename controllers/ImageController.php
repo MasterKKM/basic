@@ -171,6 +171,7 @@ class ImageController extends Controller
      * Выдача картинки загрузженной в галерею.
      * @param $name string Имя изображения.
      * @throws NotFoundHttpException Если картинка не неайдена.
+     * @return null
      */
     public function actionLoad($name)
     {
@@ -187,9 +188,11 @@ class ImageController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        Yii::$app->response->headers->set('Content-Type', 'image/png');
+        Yii::$app->response->sendFile($fileName);
         Yii::$app->response->headers->set('Content-Transfer-Encoding', 'binary');
+        Yii::$app->response->headers->set('Content-Type', 'image/png');
 
-        readfile($fileName);
+        Yii::$app->response->send();
+        return null;
     }
 }
