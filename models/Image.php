@@ -7,6 +7,9 @@ use dektrium\user\models\User;
 use yii\imagine\Image as ImageHelper;
 use Imagine\Image\Box;
 use Imagine\Image\ManipulatorInterface;
+use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
+
 
 /**
  * This is the model class for table "image".
@@ -17,7 +20,8 @@ use Imagine\Image\ManipulatorInterface;
  * @property string $text
  * @property yii\web\UploadedFile $file
  * @property int $free
- *
+ * @property string create_at
+ * @property string event_date
  * @property User $user
  */
 class Image extends \yii\db\ActiveRecord
@@ -46,6 +50,7 @@ class Image extends \yii\db\ActiveRecord
             [['user_id', 'file_name', 'free'], 'required'],
             [['user_id'], 'integer'],
             [['text'], 'string'],
+            [['create_at', 'event_date'], 'safe'],
             [['file_name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['file'], 'file', 'extensions' => 'jpg, png'],
@@ -66,6 +71,8 @@ class Image extends \yii\db\ActiveRecord
             'file_name' => 'File Name',
             'text' => 'Text',
             'free' => 'Видимость',
+            'create_at' => 'Дата внесения',
+            'event_date' => 'Дата',
         ];
     }
 
@@ -188,5 +195,21 @@ class Image extends \yii\db\ActiveRecord
             $rez['key'] = (int)$tab[0][1];
         }
         return $rez;
+    }
+
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        $table = parent::behaviors();
+        return array_merge($table, [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'create_at',
+                'updatedAtAttribute' => false,
+                'value' => new Expression('NOW()'),
+            ],
+        ]);
     }
 }
