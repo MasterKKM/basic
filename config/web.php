@@ -65,6 +65,7 @@ $config = [
             'enableUnconfirmedLogin' => true, // Регистрация не требует подтверждения.
             'adminPermission' => 'adminAccess', // Название rbac пермишена разрешающего доступ к админке.
         ],
+        'rbac' => 'dektrium\rbac\RbacWebModule',
     ],
 ];
 
