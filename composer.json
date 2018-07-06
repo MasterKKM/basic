@@ -21,7 +21,8 @@
         "dektrium/yii2-user": "^0.9.14",
         "yiisoft/yii2-imagine": "*",
         "newerton/yii2-fancybox": "dev-master",
-        "kartik-v/yii2-widget-datepicker": "@dev"
+        "kartik-v/yii2-widget-datepicker": "@dev",
+        "dektrium/yii2-rbac": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

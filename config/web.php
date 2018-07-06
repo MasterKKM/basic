@@ -60,8 +60,9 @@ $config = [
             'class' => 'dektrium\user\Module',
             'enableConfirmation' => false, // Отправить письмо о регистрации на почту.
             'enableUnconfirmedLogin' => true, // Регистрация не требует подтверждения.
-            'admins' => ['administrator'], // Список администраторов.
+            'adminPermission' => 'adminAccess', // Название rbac пермишена разрешающего доступ к админке.
         ],
+        'rbac' => 'dektrium\rbac\RbacWebModule',
     ],
 ];
 
