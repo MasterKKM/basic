@@ -47,8 +47,8 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'file_name', 'free'], 'required'],
-            [['user_id'], 'integer'],
+            [['user_id', 'file_name', 'free', 'section_id'], 'required'],
+            [['user_id', 'section_id'], 'integer'],
             [['text'], 'string'],
             [['create_at', 'event_date'], 'safe'],
             [['file_name'], 'string', 'max' => 255],
@@ -73,6 +73,7 @@ class Image extends \yii\db\ActiveRecord
             'free' => 'Видимость',
             'create_at' => 'Дата внесения',
             'event_date' => 'Дата',
+            'section_id' => 'Раздел',
         ];
     }
 
@@ -211,5 +212,13 @@ class Image extends \yii\db\ActiveRecord
                 'value' => new Expression('NOW()'),
             ],
         ]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSection()
+    {
+        return $this->hasOne(Section::className(), ['id' => 'section_id']);
     }
 }
