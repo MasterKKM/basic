@@ -36,20 +36,30 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+
+    $menuItems = [
+        ['label' => 'Просмотр', 'url' => ['/site/index']],
+        ['label' => 'Управление', 'url' => ['/image/index']],
+        ['label' => 'Профиль', 'url' => ['/user/settings/profile']],
+    ];
+    if (Yii::$app->user->can('editor')) {
+        $menuItems[] = ['label' => 'Разделы', 'url' => ['/section/index']];
+    }
+    if (Yii::$app->user->can('admin')) {
+        $menuItems[] = ['label' => 'Администрирование', 'url' => ['/user/admin/index']];
+    }
+
+    $menuItems = array_merge($menuItems, [Yii::$app->user->isGuest ?
+        ['label' => 'Sign in', 'url' => ['/user/security/login']] :
+        ['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',
+            'url' => ['/user/security/logout'],
+            'linkOptions' => ['data-method' => 'post']],
+        ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest]
+    ]);
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Управление галереей', 'url' => ['/image/index']],
-            ['label' => 'Профиль', 'url' => ['/user/settings/profile']],
-            ['label' => 'Администрирование', 'url' =>['/user/admin/index']],
-            Yii::$app->user->isGuest ?
-                ['label' => 'Sign in', 'url' => ['/user/security/login']] :
-                ['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/user/security/logout'],
-                    'linkOptions' => ['data-method' => 'post']],
-            ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest]
-        ],
+        'items' => $menuItems,
     ]);
     NavBar::end();
     ?>

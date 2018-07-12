@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ($data->free) ? 'Все' : 'Только зарегистрированные';
                 }
             ],
+            'section.name',
             'file_name',
             'text:ntext',
 
