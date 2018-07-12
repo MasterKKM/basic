@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
+use app\models\Section;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Image */
@@ -42,6 +43,7 @@ use kartik\date\DatePicker;
                     ]
                 ]);
                 ?>
+                <?= $form->field($model, 'section_id')->dropDownList(Section::getAllSections()) ?>
                 <div class="form-group">
                     <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
                 </div>
