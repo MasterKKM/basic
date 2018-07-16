@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\Image;
 use yii\data\ActiveDataProvider;
+use app\models\ImagesSelect;
 
 class SiteController extends Controller
 {
@@ -54,16 +55,21 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Показать в виде галереи.
      *
      * @return string
      */
     public function actionIndex()
     {
+        $selectModel = new ImagesSelect;
         if (Yii::$app->user->isGuest) {
             $query = Image::find()->where('free = 1');
         } else {
-            $query = Image::find();
+            if ($selectModel->load(Yii::$app->request->get()) && $selectModel->validate()) {
+                $query = Image::findFilters($selectModel);
+            } else {
+                $query = Image::find();
+            }
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -75,6 +81,8 @@ class SiteController extends Controller
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'selectModel' => $selectModel,
+
         ]);
     }
 

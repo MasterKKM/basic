@@ -221,4 +221,24 @@ class Image extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Section::className(), ['id' => 'section_id']);
     }
+
+    /**
+     * Применяем фильтры для отбора нужных фотографий из списка.
+     * @param $selectModel ImagesSelect
+     * @return \yii\db\ActiveQuery
+     */
+    public static function findFilters($selectModel)
+    {
+        $where = [];
+        $values = [];
+        if (!empty($selectModel->selectDate)) {
+            $where[] = 'event_date = :selectDate';
+            $values[':selectDate'] = $selectModel->selectDate;
+        }
+        if (!empty($selectModel->selectSection)) {
+            $where[] = 'section_id = :selectSection';
+            $values[':selectSection'] = $selectModel->selectSection;
+        }
+        return Image::find()->where(implode(' AND ', $where), $values);
+    }
 }

@@ -5,13 +5,20 @@ use \yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $selectModel app\models\ImagesSelect */
 
 $this->title = 'My Yii Application';
 ?>
     <div class="site-index">
 
-        <div class="jumbotron">
-            <h1>Галерея!</h1>
+        <div>
+            <?php
+            if (!Yii::$app->user->isGuest) {
+                echo $this->render('_imageselect', [
+                    'model' => $selectModel,
+                ]);
+            }
+            ?>
         </div>
 
         <div class="body-content">
