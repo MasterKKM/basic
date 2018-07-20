@@ -12,7 +12,7 @@ use yii\helpers\Url;
          style="position: absolute; left: 20px; top: 5px; width: 85px;"><?= $model->event_date ?></div>
     <div class="bg-primary"
          style="position: absolute; right: 20px; top: 5px; width: 85px;"><a href="<?= Url::to(['/image/load', 'name' => 'image_' . $model->id . '.png']) ?>" class="btn btn-success btn-xs btn-block">Скачать</a></div>
-    <div style="height: 60px;margin-top: -15px">
+    <div style="height: 60px;margin-top: -15px;overflow: hidden;">
         <?= $model->text ?>
     </div>
 </div>
