@@ -239,6 +239,10 @@ class Image extends \yii\db\ActiveRecord
             $where[] = 'section_id = :selectSection';
             $values[':selectSection'] = $selectModel->selectSection;
         }
+        if (!empty($selectModel->selectUser)) {
+            $where[] = 'user_id = :selectUser';
+            $values[':selectUser'] = $selectModel->selectUser;
+        }
         return Image::find()->where(implode(' AND ', $where), $values);
     }
 }
