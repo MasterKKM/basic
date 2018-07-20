@@ -11,6 +11,7 @@ class ImagesSelect extends Model
 {
     public $selectDate = null;
     public $selectSection = null;
+    public $selectUser = null;
 
     /**
      * @inheritdoc
@@ -19,7 +20,7 @@ class ImagesSelect extends Model
     {
         return [
             [['selectDate'], 'string'],
-            [['selectSection'], 'integer'],
+            [['selectSection', 'selectUser'], 'integer'],
         ];
     }
 
@@ -31,6 +32,7 @@ class ImagesSelect extends Model
         return [
             'selectDate' => 'Дата события',
             'selectSection' => 'Раздел',
+            'selectUser' => 'Пользователь',
         ];
     }
 }

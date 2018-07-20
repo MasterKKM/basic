@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 use app\models\Section;
+use app\models\Users;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\ImagesSelect */
@@ -31,6 +32,7 @@ use app\models\Section;
     ?>
 
     <?= $form->field($model, 'selectSection', ['options' => ['class' => '']])->dropDownList(['' => 'Все'] + Section::getAllSections()) ?>
+    <?= $form->field($model, 'selectUser', ['options' => ['class' => '']])->dropDownList(['' => 'Все'] + Users::getAll()) ?>
 
     <div class="">
         <?= Html::submitButton('Отобрать', ['class' => 'btn btn-primary btn-sm']) ?>
