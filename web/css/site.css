@@ -96,9 +96,9 @@ a.desc:after {
     border: none;
 }
 
-@media(max-width:767px) {
+@media (max-width: 767px) {
     .nav li > form > button.logout {
-        display:block;
+        display: block;
         text-align: left;
         width: 100%;
         padding: 10px 15px;
@@ -117,12 +117,50 @@ a.desc:after {
 .top-0 {
     margin-top: 0px;
 }
+
 .top-1 {
     margin-top: 2px;
 }
+
 .top-2 {
     margin-top: 4px;
 }
+
 .top-3 {
     margin-top: 6px;
+}
+
+.cards_element_date {
+    position: absolute;
+    left: 20px;
+    top: 5px;
+    width: 85px;
+}
+
+.cards_element_image {
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    width: 85px;
+}
+
+.cards_element_bg {
+    height: 60px;
+    margin-top: -20px;
+    overflow: hidden;
+}
+
+.cards_element_info {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 3px;
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.cards_element_info:hover {
+    height: 300px;
 }
